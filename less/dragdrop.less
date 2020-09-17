@@ -67,9 +67,11 @@
     }
 
     .dragdrop__item-image {
-        width: 100%;
-        height: auto;
-        object-fit: contain;
+        // width: 100%;
+        // height: auto;
+        background-size: contain;
+        background-repeat: no-repeat;
+        background-position: center;
         flex: 1 1 auto;
     }
 
@@ -93,7 +95,7 @@
         margin-bottom: 1rem;
         display: flex;
         flex-direction: column;
-        justify-content: center;
+        justify-content: flex-start;
         margin-left: 1rem;
     }
 
@@ -108,12 +110,13 @@
     }
 
     .dragdrop__placeholder-items {
-        flex: 1 1 auto;
+        // flex: 1 1 auto;
         display: flex;
         flex-direction: row;
-        min-height: 10rem;
         border: 1px dashed @item-color; // @grey; //
         border-radius: 1rem;
+        height: auto;
+        justify-content: center;
 
         .dragdrop__item {
             margin: 0.5rem;

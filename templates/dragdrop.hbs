@@ -5,16 +5,16 @@
 
     <div class="dragdrop__items">
     {{#each _items}}
-      <div id="dragdrop__item" style="width: {{_dimensions._width}};" >
+      <div id="dragdrop__item" style="width: {{../_itemDimensions._width}};" >
         <div id="dragdrop__item-{{@index}}" 
           class="dragdrop__item js-drag-item {{_classes}}" 
           draggable="true"
-          {{!-- style="width: {{_dimensions._width}}; height: {{_dimensions._height}}"  --}}
+          style="width: {{../_itemDimensions._width}}; height: {{../_itemDimensions._height}}" 
           >
           {{#if text}}
             <div class="dragdrop__item-title">{{text}}</div>
           {{/if}} 
-          {{#if _graphic}}<img src="{{_graphic._url}}" class="dragdrop__item-image" draggable="false" />{{/if}} 
+          {{#if _graphic}}<div style="background-image: url({{_graphic._url}});" class="dragdrop__item-image" draggable="false"></div>{{/if}} 
         </div>
       </div>
       
@@ -27,7 +27,10 @@
         {{#if title}}
           <div class="dragdrop__placeholder-title">{{title}}</div>
         {{/if}} 
-        <div id="dragdrop__placeholder-{{@index}}" class="dragdrop__placeholder-items js-drag-target" ></div>
+        <div id="dragdrop__placeholder-{{@index}}" 
+              class="dragdrop__placeholder-items js-drag-target" 
+              style="min-height: {{../_itemDimensions._height}}"
+              ></div>
       </div>
     {{/each}}
     </div> 
