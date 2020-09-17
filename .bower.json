@@ -1,0 +1,25 @@
+{
+  "name": "adapt-walkgrove-dragdrop",
+  "version": "1.0.0",
+  "framework": ">=5",
+  "homepage": "https://github.com/walkgrovedev/adapt-walkgrove-dragdrop.git",
+  "component": "dragdrop",
+  "displayName": "Drag Drop",
+  "description": "A component ...",
+  "main": "/js/adapt-walkgrove-dragdrop.js",
+  "keywords": [
+    "adapt-plugin",
+    "adapt-component"
+  ],
+  "license": "GPL-3.0",
+  "_release": "1.0.0",
+  "_resolution": {
+    "type": "version",
+    "tag": "v1.0.0",
+    "commit": "ee2952fedacf99c49eb56e093bd77647c8b15b99"
+  },
+  "_source": "git://github.com/walkgrovedev/adapt-walkgrove-dragdrop.git",
+  "_target": "1.0.0",
+  "_originalSource": "adapt-walkgrove-dragdrop",
+  "_direct": true
+}
