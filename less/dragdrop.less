@@ -1,0 +1,125 @@
+.dragdrop {
+    position: relative;
+
+    &__main {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+    
+        &.row {
+            flex-direction: row;
+
+            .dragdrop__items {
+                flex-direction: column;
+            }
+
+            &.dragdrop__placeholders {
+                padding-left: 0rem!important;
+            }
+
+            &.dragdrop__placeholder {
+                padding-left: 0rem!important;
+            }
+        }
+
+        &.column {
+            .dragdrop__items {
+                .dragdrop__item {
+                    margin-right: 1rem;
+                }
+            }
+        }
+    
+    }
+
+    &__items {
+        // position: relative;
+        display: flex;
+        flex-direction: row;
+        width: auto;
+        justify-content: center;
+        align-content: center;
+        max-width: 50%;
+    }
+
+    .dragdrop__item {
+        // position: absolute;
+        cursor: move;
+        background-color: @item-color; // @secondary-colour;
+        color: @item-color-inverted;
+        padding: 1rem;
+        flex: 0 0 auto;
+        margin-bottom: 1rem;
+        overflow:hidden;
+        display: flex;
+        flex-direction: column;
+
+        &.no-padding {
+            padding: 0!important;
+        }
+    }
+
+    .dragdrop__item-title {
+        text-align: center;
+        font-weight: 700;
+        margin: 1rem;
+        flex: 0 0 auto;
+    }
+
+    .dragdrop__item-image {
+        width: 100%;
+        height: auto;
+        object-fit: contain;
+        flex: 1 1 auto;
+    }
+
+    &__placeholders {
+        display: flex;
+        flex-direction: column;
+        flex: 1 1 auto;
+        justify-content: center;
+        align-content: center;
+        // max-width: 50%;
+
+        &.row {
+            flex-direction: row;
+        }
+    }
+
+    .dragdrop__placeholder {
+        // border: 1px solid @primary-colour;
+        // padding: 1rem;
+        flex: 1 1 auto;
+        margin-bottom: 1rem;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        margin-left: 1rem;
+    }
+
+    .dragdrop__placeholder-title {
+        font-weight: 700;
+        flex: 0 0 auto;
+        display: flex;
+        padding-bottom: 0.5rem;
+        justify-content: center;
+        width: 100%;
+        // color: @primary-colour;
+    }
+
+    .dragdrop__placeholder-items {
+        flex: 1 1 auto;
+        display: flex;
+        flex-direction: row;
+        min-height: 10rem;
+        border: 1px dashed @item-color; // @grey; //
+        border-radius: 1rem;
+
+        .dragdrop__item {
+            margin: 0.5rem;
+        }
+    }
+
+
+
+}
