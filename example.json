@@ -7,8 +7,57 @@
         "_layout": "left",
         "title": "Our first look at a component",
         "displayTitle": "Our first look at a component",
-        "body": "This component you're reading is a text component. All components take this form of a title and body - except a blank component. However it's important to realise that title and body attributes are not needed. <br><br>Take for instance the media component opposite or below on a smaller device - has no body attribute. Instead of the HTML being rendered Adapt simply doesn't render it. The title attribute is simply a break tag to push the media component level with the opposite component.",
+        "body": "This component ...",
         "instruction": "",
+        "_position": "row",
+        "_comment": "row (side-by-side) | column (stacked)",
+        "_placeholder_position": "row",
+        "_feedbackInline": false,
+        "_itemDimensions": {
+            "_width": "200px",
+            "_height": "250px"
+        },
+        "_items": [
+            {
+                "text": "Option 1 (1)",
+                "_placeholder": 1,
+                "_classes": "no-padding",
+                "_graphic": {
+                    "_url": "https://via.placeholder.com/200x250",
+                    "alt": "Placeholder graphic."
+                }
+            },
+            {
+                "_placeholder": 1,
+                "_graphic": {
+                    "_url": "https://via.placeholder.com/200x250",
+                    "alt": "Placeholder graphic."
+                }
+            },
+            {
+                "text": "Option 3 (2)",
+                "_placeholder": 2,
+                "_graphic": {
+                    "_url": "https://via.placeholder.com/200x250",
+                    "alt": "Placeholder graphic."
+                }
+            }
+        ],
+        "_placeholders": [
+            {
+                "title": "Group 1"
+            },
+            {
+                "title": "Group 2"
+            }
+        ],
+        "checkText": "Submit",
+        "feedbackText" : "Show feedback",
+        "_feedback": {
+            "title": "Feedback",
+            "correct": "Correct feedback text.<br><br>That’s correct. ...",
+            "incorrect": "Incorrect feedback text.<br><br>Sorry, that’s not right. ..."
+        },
         "_pageLevelProgress": {
             "_isEnabled": true
         }

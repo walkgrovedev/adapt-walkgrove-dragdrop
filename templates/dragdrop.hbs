@@ -5,8 +5,8 @@
 
     <div class="dragdrop__items">
     {{#each _items}}
-      <div id="dragdrop__item" style="width: {{../_itemDimensions._width}};" >
-        <div id="dragdrop__item-{{@index}}" 
+      <div id="dragdrop__item-container" style="width: {{../_itemDimensions._width}};" >
+        <div id="{{../_id}}-dragdrop__item-{{@index}}" 
           class="dragdrop__item js-drag-item {{_classes}}" 
           draggable="true"
           style="width: {{../_itemDimensions._width}}; height: {{../_itemDimensions._height}}" 
@@ -28,6 +28,7 @@
           <div class="dragdrop__placeholder-title">{{title}}</div>
         {{/if}} 
         <div id="dragdrop__placeholder-{{@index}}" 
+              data-placeholder="{{@index}}"
               class="dragdrop__placeholder-items js-drag-target" 
               style="min-height: {{../_itemDimensions._height}}"
               ></div>
@@ -35,6 +36,23 @@
     {{/each}}
     </div> 
 
+  </div>
+
+  <div class="dragdrop__buttons button">
+    <button class="dragdrop__btn btn js-dragdrop-check-click"  aria-label="{{{checkText}}}">
+      {{{checkText}}}
+    </button>
+    <button class="dragdrop__btn btn js-dragdrop-showfeedback-click is-hidden"  aria-label="{{{feedbackText}}}">
+      {{{feedbackText}}}
+    </button>
+  </div>
+
+  <div id="dragdrop__feedback" class="dragdrop__feedback">
+    {{#if _feedback.title}}
+      <h2 class="dragdrop__placeholder-title">{{_feedback.title}}</h2>
+    {{/if}} 
+    <div class="dragdrop__feedback-correct feedback" >{{{_feedback.correct}}}</div>
+    <div class="dragdrop__feedback-incorrect feedback" >{{{_feedback.incorrect}}}</div>
   </div>
 
 </div>

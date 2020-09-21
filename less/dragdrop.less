@@ -1,6 +1,37 @@
 .dragdrop {
     position: relative;
 
+    &__buttons {
+        justify-content: center;
+        flex: 0 0 auto;
+        display: none;
+
+        @media (max-width: @device-width-small) {
+            flex-direction: column;
+            flex-wrap: wrap;
+        }
+
+        &.is-visible {
+            display: flex;
+            opacity: 1;
+            animation: fadeIn;
+            animation-duration: 1s;
+        }
+
+    }
+
+    &__btn {
+        margin: 2rem 1rem 1rem 0;
+
+        &.is-selected, &.is-hidden {
+            display: none;
+        }
+
+        &.is-visible {
+            display: block;
+        }
+    }
+    
     &__main {
         width: 100%;
         display: flex;
@@ -23,10 +54,16 @@
         }
 
         &.column {
+            width: 100%;
+            
             .dragdrop__items {
-                .dragdrop__item {
-                    margin-right: 1rem;
-                }
+                width: 100%;
+                max-width: 100%;
+                flex-direction: row;
+            }
+
+            .dragdrop__item-container {
+                margin-right: 1rem;
             }
         }
     
@@ -126,6 +163,26 @@
         }
     }
 
+    &__feedback {
+
+        display: none;
+        flex-direction: column;
+
+        &.is-visible {
+            display: flex;
+        }
+
+        .feedback {
+            display: none;
+
+            &.show-feedback {
+                display: flex;
+                opacity: 1;
+                animation: fadeIn;
+                animation-duration: 1s;
+            }
+        }
+    }
 
 
 }
