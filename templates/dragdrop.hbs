@@ -6,13 +6,14 @@
     <div class="dragdrop__items">
     {{#each _items}}
       <div id="dragdrop__item-container" style="width: {{../_itemDimensions._width}};" >
-        <div id="{{../_id}}-dragdrop__item-{{@index}}" 
+        <div id="drag-item-{{@index}}" 
           class="dragdrop__item js-drag-item {{_classes}}" 
+          data-draggable="{{_placeholder}}"
           draggable="true"
           style="width: {{../_itemDimensions._width}}; height: {{../_itemDimensions._height}}" 
           >
           {{#if text}}
-            <div class="dragdrop__item-title">{{text}}</div>
+            <div class="dragdrop__item-title">{{{text}}}</div>
           {{/if}} 
           {{#if _graphic}}<div style="background-image: url({{_graphic._url}});" class="dragdrop__item-image" draggable="false"></div>{{/if}} 
         </div>

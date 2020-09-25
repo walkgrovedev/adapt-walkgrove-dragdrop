@@ -39,6 +39,9 @@
     
         &.row {
             flex-direction: row;
+            @media (max-width: @device-width-small) {
+                flex-direction: column;
+            }
 
             .dragdrop__items {
                 flex-direction: column;
@@ -49,7 +52,7 @@
             }
 
             &.dragdrop__placeholder {
-                padding-left: 0rem!important;
+                padding-left: 0rem!important;                
             }
         }
 
@@ -60,11 +63,10 @@
                 width: 100%;
                 max-width: 100%;
                 flex-direction: row;
-            }
 
-            .dragdrop__item-container {
-                margin-right: 1rem;
+                justify-content: space-between;
             }
+            
         }
     
     }
@@ -77,6 +79,8 @@
         justify-content: center;
         align-content: center;
         max-width: 50%;
+
+        flex-wrap: wrap;
     }
 
     .dragdrop__item {
@@ -87,10 +91,15 @@
         padding: 1rem;
         flex: 0 0 auto;
         margin-bottom: 1rem;
+        box-sizing: border-box;
         overflow:hidden;
         display: flex;
         flex-direction: column;
         z-index: 1;
+
+        @media (max-width: @device-width-small) {
+            width: 100%!important;
+        }
 
         &.no-padding {
             padding: 0!important;
@@ -100,7 +109,7 @@
     .dragdrop__item-title {
         text-align: center;
         font-weight: 700;
-        margin: 1rem;
+        // margin: 1rem;
         flex: 0 0 auto;
     }
 
@@ -116,13 +125,18 @@
     &__placeholders {
         display: flex;
         flex-direction: column;
-        flex: 1 1 auto;
+        flex: 0 0 auto;
+        max-width: 100%;
         justify-content: center;
         align-content: center;
         // max-width: 50%;
 
         &.row {
             flex-direction: row;
+            @media (max-width: @device-width-small) {
+                flex-direction: column;
+            }
+
         }
     }
 
@@ -136,11 +150,20 @@
         justify-content: flex-start;
         margin-left: 1rem;
         z-index: 1;
+
+        @media (max-width: @device-width-small) {
+            width: 100%!important;
+            margin-left: 0!important;
+        }
+
+        &:first-of-type {
+            margin-left: 0!important;
+        }
     }
 
     .dragdrop__placeholder-title {
         font-weight: 700;
-        flex: 0 0 auto;
+        flex: 1 1 auto;
         display: flex;
         padding-bottom: 0.5rem;
         justify-content: center;
@@ -149,14 +172,17 @@
     }
 
     .dragdrop__placeholder-items {
-        // flex: 1 1 auto;
+        flex: 0 0 auto;
         display: flex;
         flex-direction: row;
         border: 1px dashed @item-color; // @grey; //
         border-radius: 1rem;
-        height: auto;
+        // height: 100%;
         justify-content: center;
+        align-items: center;
         z-index: 2;
+        flex-wrap: wrap;
+        padding: 1rem 0;
 
         .dragdrop__item {
             margin: 0.5rem;

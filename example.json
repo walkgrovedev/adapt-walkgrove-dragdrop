@@ -8,7 +8,7 @@
         "title": "Our first look at a component",
         "displayTitle": "Our first look at a component",
         "body": "This component ...",
-        "instruction": "",
+        "instruction": "Drag { ... }",
         "_position": "row",
         "_comment": "row (side-by-side) | column (stacked)",
         "_placeholder_position": "row",

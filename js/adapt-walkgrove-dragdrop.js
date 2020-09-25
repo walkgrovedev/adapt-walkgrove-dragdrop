@@ -16,6 +16,7 @@ define([
 
     _draggable: null,
     _isSubmitted: false,
+    _attemptsMade: 0,
 
     preRender: function() {
       this._isSubmitted = false;
@@ -24,6 +25,20 @@ define([
 
     postRender: function() {
       this.setReadyStatus();
+
+      // this.model.get('_items').forEach(function(item, index) {
+        if(this.model.get('_placeholder_position') === "row") {
+          $('.dragdrop__placeholder').width("" + 90/this.model.get('_items').length + "%");
+          const itemDimensions = this.model.get('_itemDimensions');
+          const stacked = this.model.get('_items').length/this.model.get('_placeholders').length;
+          let heightVar = itemDimensions._height;
+          heightVar = Number(heightVar.replace('px',''));
+          console.log(stacked, heightVar);
+          $('.dragdrop__placeholder-items').attr('style','min-height:'  + ( stacked * heightVar) + 'px');// .height("" +  stacked * heightVar + "");
+        }
+         
+      // });
+
     },
 
     checkIfResetOnRevisit: function() {
@@ -56,18 +71,26 @@ define([
     },
 
     onCheckClicked: function() {
-      this._isSubmitted = true;
-      
+
       let correct = true;
 
+      this._attemptsMade++;
+
       this.model.get('_items').forEach(function(item, index) {
-        const draggable_placeholder = this.$('.js-drag-item').eq(index).data('placeholder');
-        if(item._placeholder !== draggable_placeholder) {
+        // console.log('drag-item-' + index);
+        const draggable = document.getElementById('drag-item-' + index);
+        // console.log(draggable);
+        let draggable_place = draggable.getAttribute('data-draggable');
+        let draggable_placeholder = draggable.getAttribute('data-placeholder');
+        // console.log(draggable_place, draggable_placeholder);
+        if(draggable_place !== draggable_placeholder) {
           correct = false;
         }
+          
       });
 
       const feedbackInline = this.model.get('_feedbackInline');
+
 
       if(feedbackInline) {
         // INLINE FEEDBACK
@@ -81,20 +104,35 @@ define([
         if(correct) {
           this.$('.dragdrop__feedback-correct').addClass('show-feedback');
         } else {
-          this.$('.dragdrop__feedback-incorrect').addClass('show-feedback');
+          if(this._attemptsMade === Number(this.model.get('_feedback')._attempts)) {
+            this.$('.dragdrop__feedback-incorrect').addClass('show-feedback');
+          } else {
+            this.$('.dragdrop__feedback-incorrect_final').addClass('show-feedback');
+          }
         }
       } else {
         //NOTIFY POPUP FEEDBACK
         if(correct) {
           this.setupCorrectFeedback();
         } else {
-          this.setupIncorrectFeedback();
+          if(this._attemptsMade === Number(this.model.get('_feedback')._attempts)) {
+            this.setupIncorrectFinalFeedback();
+          }else {
+            this.setupIncorrectFeedback();
+          }
         }
-        this.$('.js-dragdrop-showfeedback-click').addClass('is-visible');
+        if(this._attemptsMade === Number(this.model.get('_feedback')._attempts) || correct) {
+          this.$('.js-dragdrop-showfeedback-click').addClass('is-visible');
+          this._isSubmitted = true;
+        }
       }
 
-      this.$('.js-dragdrop-check-click').addClass('is-selected');
-      this.setCompletionStatus();
+      if(this._attemptsMade === Number(this.model.get('_feedback')._attempts) || correct) {
+        this.$('.js-dragdrop-check-click').addClass('is-selected');
+        this.setCompletionStatus();
+      }
+
+    
     },
 
     setItemVisited: function(_draggable) {
@@ -127,6 +165,13 @@ define([
       Adapt.trigger('notify:popup', {
         title: this.getFeedbackTitle(),
         body: this.model.get('_feedback').incorrect
+      });
+    },
+
+    setupIncorrectFinalFeedback() {
+      Adapt.trigger('notify:popup', {
+        title: this.getFeedbackTitle(),
+        body: this.model.get('_feedback').incorrect_final
       });
     },
 
