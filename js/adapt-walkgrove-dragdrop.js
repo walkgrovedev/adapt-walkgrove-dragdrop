@@ -106,18 +106,30 @@ define([
               correctAnswer = option.text;
             }
           });
-          const answer = $('.js-dropdown-inner').eq(index).html();
+          
+          const answer = "";
+          this.$('.matching__select').each(function(i, el) {
+            console.log(i);
+            if(i === index) {
+              answer = $(el).find('.js-dropdown-inner').html();
+            }
+            
+          });
 
-          if(answer != correctAnswer) {
-            correct = false;
-            $('.matching__select-incorrect-icon').eq(index).show();
-          } else {
-            $('.matching__select-correct-icon').eq(index).show();
-          }
+          this.$('.matching__select').each(function(i, el) {
+            if(i === index) {
+              if(answer != correctAnswer) {
+                correct = false;
+                $(el).find('.matching__select-incorrect-icon').show();
+              } else {
+                $(el).find('.matching__select-correct-icon').show();
+              }
+            }
+          });
 
         });
 
-        if(this._attemptsMade === Number(this.model.get('_feedback')._attempts)) {
+        if(this._attemptsMade === Number(this.model.get('_feedback')._attempts) || correct === true) {
           this.disableQuestion();
         }
 
@@ -233,7 +245,7 @@ define([
       this.$('.matching__item').each(function(i, el) {
         var value = i;
         var dropdown = new DropDown({
-          el: $(el).find('.dropdown')[0],
+          el: this.$(el).find('.dropdown')[0],
           placeholder: this.model.get('placeholder'),
           value: value
         });
