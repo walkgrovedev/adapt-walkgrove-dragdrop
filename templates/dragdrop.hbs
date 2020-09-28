@@ -5,26 +5,24 @@
 
     <div class="dragdrop__items">
     {{#each _items}}
-      <div id="dragdrop__item-container" style="width: {{../_itemDimensions._width}};" >
+      {{!-- <div id="dragdrop__item-container"  > --}}
         <div id="drag-item-{{@index}}" 
           class="dragdrop__item js-drag-item {{_classes}}" 
           data-draggable="{{_placeholder}}"
-          draggable="true"
-          style="width: {{../_itemDimensions._width}}; height: {{../_itemDimensions._height}}" 
-          >
+          draggable="true">
           {{#if text}}
             <div class="dragdrop__item-title">{{{text}}}</div>
           {{/if}} 
           {{#if _graphic}}<div style="background-image: url({{_graphic._url}});" class="dragdrop__item-image" draggable="false"></div>{{/if}} 
         </div>
-      </div>
+      {{!-- </div> --}}
       
     {{/each}}
     </div> 
 
     <div class="dragdrop__placeholders {{_placeholder_position}}">
     {{#each _placeholders}}
-      <div class="dragdrop__placeholder" >
+      <div class="dragdrop__placeholder {{_classes}}">
         {{#if title}}
           <div class="dragdrop__placeholder-title">{{title}}</div>
         {{/if}} 
@@ -39,21 +37,59 @@
 
   </div>
 
-  <div class="dragdrop__buttons button">
+  <div class="dragdrop__main-mobile">
+    
+    
+    {{#each _items}}
+    <div class="matching__item item item-{{@index}}{{#unless ../_isEnabled}}{{#if ../_canShowMarking}}{{#if _isCorrect}} is-correct{{else}} is-incorrect{{/if}}{{/if}}{{/unless}}">
+
+      {{#if text}}
+      <div class="matching__item-title">
+        <div class="matching__item-title_inner">
+          {{{text}}}
+        </div>
+      </div>
+      {{/if}}
+
+      <div class="matching__select-container">
+
+        {{> dropdown this placeholder=../placeholder _id=../_id _dropdownIndex=@index}}
+
+         <div class="matching__select-state">
+          <div class="matching__select-icon matching__select-correct-icon">
+            <div class="icon"></div>
+          </div>
+          <div class="matching__select-icon matching__select-incorrect-icon">
+            <div class="icon"></div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+    {{/each}}
+
+  </div>
+
+  <div class="dragdrop__buttons button" id="dragdrop__buttons">
     <button class="dragdrop__btn btn js-dragdrop-check-click"  aria-label="{{{checkText}}}">
-      {{{checkText}}}
+      <span>{{{checkText}}}</span>
     </button>
     <button class="dragdrop__btn btn js-dragdrop-showfeedback-click is-hidden"  aria-label="{{{feedbackText}}}">
-      {{{feedbackText}}}
+      <span>{{{feedbackText}}}</span>
     </button>
   </div>
 
   <div id="dragdrop__feedback" class="dragdrop__feedback">
     {{#if _feedback.title}}
-      <h2 class="dragdrop__placeholder-title">{{_feedback.title}}</h2>
+      <h2 class="dragdrop__feedback-title">{{_feedback.title}}</h2>
     {{/if}} 
     <div class="dragdrop__feedback-correct feedback" >{{{_feedback.correct}}}</div>
     <div class="dragdrop__feedback-incorrect feedback" >{{{_feedback.incorrect}}}</div>
+    <div class="dragdrop__feedback-incorrect_final feedback" >{{{_feedback.incorrect_final}}}</div>
   </div>
+
+
+  
 
 </div>

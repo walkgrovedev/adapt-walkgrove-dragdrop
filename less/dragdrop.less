@@ -22,6 +22,9 @@
 
     &__btn {
         margin: 2rem 1rem 1rem 0;
+        @media (max-width: @device-width-small) {
+            margin: 2rem 0 1rem 0;
+        }
 
         &.is-selected, &.is-hidden {
             display: none;
@@ -30,6 +33,10 @@
         &.is-visible {
             display: block;
         }
+    }
+
+    &__main-mobile {
+        display: none;
     }
     
     &__main {
@@ -64,7 +71,7 @@
                 max-width: 100%;
                 flex-direction: row;
 
-                justify-content: space-between;
+                // justify-content: space-between;
             }
             
         }
@@ -75,12 +82,16 @@
         // position: relative;
         display: flex;
         flex-direction: row;
-        width: auto;
-        justify-content: center;
+        width: 100%;
+        justify-content: stretch;
         align-content: center;
         max-width: 50%;
 
-        flex-wrap: wrap;
+        flex-wrap: nowrap;
+
+        @media (max-width: @device-width-small) {
+            flex-direction: column!important;
+        }
     }
 
     .dragdrop__item {
@@ -88,17 +99,21 @@
         cursor: move;
         background-color: @item-color; // @secondary-colour;
         color: @item-color-inverted;
-        padding: 1rem;
-        flex: 0 0 auto;
-        margin-bottom: 1rem;
-        box-sizing: border-box;
-        overflow:hidden;
+        padding: 0.5rem;
+        flex: 1 1 auto;
+        margin: 0.5rem;
         display: flex;
         flex-direction: column;
         z-index: 1;
 
+        align-content: center;
+        justify-content: center;
+
         @media (max-width: @device-width-small) {
             width: 100%!important;
+            max-width: 100%!important;
+
+            margin: 0.5rem 0;
         }
 
         &.no-padding {
@@ -110,7 +125,7 @@
         text-align: center;
         font-weight: 700;
         // margin: 1rem;
-        flex: 0 0 auto;
+        flex: 1 1 auto;
     }
 
     .dragdrop__item-image {
@@ -143,7 +158,7 @@
     .dragdrop__placeholder {
         // border: 1px solid @primary-colour;
         // padding: 1rem;
-        flex: 1 1 auto;
+        flex: 1 0 auto;
         margin-bottom: 1rem;
         display: flex;
         flex-direction: column;
@@ -163,7 +178,7 @@
 
     .dragdrop__placeholder-title {
         font-weight: 700;
-        flex: 1 1 auto;
+        // flex: 1 1 auto;
         display: flex;
         padding-bottom: 0.5rem;
         justify-content: center;
@@ -186,6 +201,7 @@
 
         .dragdrop__item {
             margin: 0.5rem;
+            flex: 1 1 auto;
         }
     }
 
@@ -200,9 +216,10 @@
 
         .feedback {
             display: none;
+            flex-direction: column;
 
             &.show-feedback {
-                display: flex;
+                display: block;
                 opacity: 1;
                 animation: fadeIn;
                 animation-duration: 1s;

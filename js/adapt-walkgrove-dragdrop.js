@@ -1,8 +1,9 @@
 define([
   'core/js/adapt',
   'core/js/views/componentView',
-  'core/js/models/componentModel'
-], function(Adapt, ComponentView, ComponentModel) {
+  'core/js/models/componentModel',
+  './dropdown'
+], function(Adapt, ComponentView, ComponentModel, DropDown) {
 
   var DragdropView = ComponentView.extend({
 
@@ -26,18 +27,35 @@ define([
     postRender: function() {
       this.setReadyStatus();
 
-      // this.model.get('_items').forEach(function(item, index) {
-        if(this.model.get('_placeholder_position') === "row") {
-          $('.dragdrop__placeholder').width("" + 90/this.model.get('_items').length + "%");
-          const itemDimensions = this.model.get('_itemDimensions');
-          const stacked = this.model.get('_items').length/this.model.get('_placeholders').length;
-          let heightVar = itemDimensions._height;
-          heightVar = Number(heightVar.replace('px',''));
-          console.log(stacked, heightVar);
-          $('.dragdrop__placeholder-items').attr('style','min-height:'  + ( stacked * heightVar) + 'px');// .height("" +  stacked * heightVar + "");
-        }
-         
-      // });
+
+      if(this.model.get('_placeholder_position') === "row") {
+        
+        $('.dragdrop__placeholder').width("" + 90/this.model.get('_items').length + "%");
+        const itemDimensions = this.model.get('_itemDimensions');
+        const stacked = this.model.get('_items').length/this.model.get('_placeholders').length;
+        let heightVar = itemDimensions._height;
+        heightVar = Number(heightVar.replace('px',''));
+        // console.log(stacked, heightVar);
+        $('.dragdrop__placeholder-items').attr('style','min-height:'  + ( stacked * heightVar) + 'px');// .height("" +  stacked * heightVar + "");
+      
+      } 
+
+      if(this.model.get('_position') === "column") {
+        
+        $('.dragdrop__item').attr('style','max-width:'  + 95/this.model.get('_items').length + '%');
+      
+      } 
+
+
+      if (screen.width <= '1024') {
+        $('.dragdrop__main').attr('style','display:none');
+        $('.dragdrop__main-mobile').attr('style','display:block');
+
+        $('.dragdrop__body-inner').html(this.model.get('mobileText'));
+        $('.dragdrop__instruction-inner').html(this.model.get('mobileInstructions'));
+        this.setUpDropdowns();
+
+      }
 
     },
 
@@ -62,11 +80,13 @@ define([
       ev.preventDefault();
       if (ev.target.classList.contains('js-drag-target') && !this._isSubmitted) {
         const draggable = document.getElementById(this._draggable);
+        $(draggable).attr('style','max-width:100%');
         ev.target.appendChild(draggable);
         this.setItemVisited(draggable);
 
         var placeholderIndex = this.$(ev.target).data('placeholder') + 1;
         draggable.setAttribute('data-placeholder', placeholderIndex);
+        
       }
     },
 
@@ -76,18 +96,47 @@ define([
 
       this._attemptsMade++;
 
-      this.model.get('_items').forEach(function(item, index) {
-        // console.log('drag-item-' + index);
-        const draggable = document.getElementById('drag-item-' + index);
-        // console.log(draggable);
-        let draggable_place = draggable.getAttribute('data-draggable');
-        let draggable_placeholder = draggable.getAttribute('data-placeholder');
-        // console.log(draggable_place, draggable_placeholder);
-        if(draggable_place !== draggable_placeholder) {
-          correct = false;
+      if (Adapt.device.screenSize !== 'large') {
+        
+        this.model.get('_items').forEach(function(item, index) {
+
+          let correctAnswer = "";
+          item._options.forEach(function(option, i) {
+            if(option._isCorrect === true) {
+              correctAnswer = option.text;
+            }
+          });
+          const answer = $('.js-dropdown-inner').eq(index).html();
+
+          if(answer != correctAnswer) {
+            correct = false;
+            $('.matching__select-incorrect-icon').eq(index).show();
+          } else {
+            $('.matching__select-correct-icon').eq(index).show();
+          }
+
+        });
+
+        if(this._attemptsMade === Number(this.model.get('_feedback')._attempts)) {
+          this.disableQuestion();
         }
+
+      } else {
+
+        this.model.get('_items').forEach(function(item, index) {
+          // console.log('drag-item-' + index);
+          const draggable = document.getElementById('drag-item-' + index);
+          // console.log(draggable);
+          let draggable_place = draggable.getAttribute('data-draggable');
+          let draggable_placeholder = draggable.getAttribute('data-placeholder');
+          // console.log(draggable_place, draggable_placeholder);
+          if(draggable_place !== draggable_placeholder) {
+            correct = false;
+          }
           
-      });
+        });
+
+      }
 
       const feedbackInline = this.model.get('_feedbackInline');
 
@@ -172,6 +221,60 @@ define([
       Adapt.trigger('notify:popup', {
         title: this.getFeedbackTitle(),
         body: this.model.get('_feedback').incorrect_final
+      });
+    },
+
+    dropdowns: null,
+
+
+    setUpDropdowns: function() {
+      _.bindAll(this, 'onOptionSelected');
+      this.dropdowns = [];
+      this.$('.matching__item').each(function(i, el) {
+        var value = i;
+        var dropdown = new DropDown({
+          el: $(el).find('.dropdown')[0],
+          placeholder: this.model.get('placeholder'),
+          value: value
+        });
+        this.dropdowns.push(dropdown);
+        dropdown.on('change', this.onOptionSelected);
+      }.bind(this));
+    },
+
+    onOptionSelected: function(dropdown) {
+      if (this.model.get('_isInteractionComplete')) return;
+      var $container = dropdown.$el.parents('.matching__select-container');
+      $container.removeClass('error');
+      if (dropdown.isEmpty()) return;
+
+      $container.addClass('is-selected');
+
+      var complete = false;
+      if(this.$('.matching__select-container').length === this.$('.is-selected').length){
+        complete = true;
+      }
+      if(complete) {
+        this.$('.dragdrop__buttons').addClass('is-visible');
+
+        const divName = "#dragdrop__buttons";
+        const element = document.querySelector(divName);
+        // scroll to element
+        setTimeout(function(){
+          element.scrollIntoView(false);
+         }, 100);
+      }
+    },
+
+    disableQuestion: function() {
+      this.dropdowns.forEach(function(dropdown) {
+        dropdown.toggleDisabled(true);
+      });
+    },
+
+    enableQuestion: function() {
+      this.dropdowns.forEach(function(dropdown) {
+        dropdown.toggleDisabled(false);
       });
     },
 
