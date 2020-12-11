@@ -29,6 +29,184 @@
       "validators": [],
       "help": "This is the instruction text",
       "translatable": true
+    },
+    "_position": {
+      "type": "string",
+      "required": true,
+      "translatable": false
+    },
+    "_placeholder_position": {
+      "type": "string",
+      "required": true,
+      "translatable": false
+    },
+    "_feedbackInline": {
+      "type": "boolean",
+      "required": false,
+      "translatable": false
+    },
+    "_itemDimensions": {
+      "type": "object",
+      "required": true,
+      "title": "Dimensions: width and height",
+      "properties": {
+        "width": {
+          "type": "string",
+          "required": true,
+          "default": "",
+          "title": "Draggable item width",
+          "inputType": "Text",
+          "validators": [],
+          "help": "",
+          "translatable": false
+        },
+        "height": {
+          "type": "string",
+          "required": true,
+          "default": "",
+          "title": "Draggable item height",
+          "inputType": "Text",
+          "validators": [],
+          "help": "",
+          "translatable": false
+        }
+      }
+    },
+    "_items": {
+      "type": "array",
+      "required": true,
+      "title": "Draggable items",
+      "items": {
+        "type": "object",
+        "required": true,
+        "properties": {
+          "text": {
+            "type": "string",
+            "required": false,
+            "default": "",
+            "title": "Draggable display title",
+            "inputType": "Text",
+            "validators": [],
+            "help": "",
+            "translatable": true
+          },
+          "_placeholder": {
+            "type": "number",
+            "required": true,
+            "default": 0,
+            "title": "Correct Pplaceholder",
+            "inputType": "Number",
+            "validators": ["required", "number"],
+            "help": "",
+            "translatable": false
+          },
+           "_classes": {
+            "type": "string",
+            "required": false,
+            "default": "",
+            "title": "Draggable item _classes",
+            "inputType": "Text",
+            "validators": [],
+            "help": "",
+            "translatable": false
+          },
+          "_graphic": {
+            "type": "object",
+            "required": false,
+            "title": "Feedbacks",
+            "properties": {
+              "_url": {
+                "type": "string",
+                "required": true,
+                "default": "",
+                "title": "Draggabke image URL",
+                "inputType": "Text",
+                "validators": [],
+                "help": "",
+                "translatable": false
+              },
+              "alt": {
+                "type": "string",
+                "required": true,
+                "default": "",
+                "title": "Draggabke image ALT",
+                "inputType": "Text",
+                "validators": [],
+                "help": "",
+                "translatable": true
+              }
+            }
+          }
+        }
+      }
+    },
+    "_placeholders": {
+      "type": "array",
+      "required": true,
+      "title": "Placeholders",
+      "items": {
+        "type": "object",
+        "required": true,
+        "properties": {
+          "title": {
+            "type": "string",
+            "required": true,
+            "default": "",
+            "title": "Placeholder title",
+            "inputType": "Text",
+            "validators": [],
+            "help": "",
+            "translatable": true
+          }
+        }
+      }
+    },
+    "checkText": {
+      "type": "string",
+      "required": true,
+      "translatable": true
+    },
+    "feedbackText": {
+      "type": "string",
+      "required": true,
+      "translatable": true
+    },
+    "_feedback": {
+      "type": "object",
+      "required": true,
+      "title": "Feedbacks",
+      "properties": {
+        "title": {
+          "type": "string",
+          "required": false,
+          "default": "",
+          "title": "Feedback title",
+          "inputType": "Text",
+          "validators": [],
+          "help": "",
+          "translatable": true
+        },
+        "correct": {
+          "type": "string",
+          "required": true,
+          "default": "",
+          "title": "Correct feedback",
+          "inputType": "Text",
+          "validators": [],
+          "help": "",
+          "translatable": true
+        },
+        "incorrect": {
+          "type": "string",
+          "required": true,
+          "default": "",
+          "title": "Incorrect feedback",
+          "inputType": "Text",
+          "validators": [],
+          "help": "",
+          "translatable": true
+        }
+      }
     }
   }
 }
