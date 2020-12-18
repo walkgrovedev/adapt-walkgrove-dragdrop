@@ -9,11 +9,12 @@
         <div id="drag-item-{{@index}}" 
           class="dragdrop__item js-drag-item {{_classes}}" 
           data-draggable="{{_placeholder}}"
-          draggable="true">
+          draggable="true"
+          {{#if text}}aria-label="{{text}}"{{/if}}>
           {{#if text}}
             <div class="dragdrop__item-title">{{{text}}}</div>
           {{/if}} 
-          {{#if _graphic}}<div style="background-image: url({{_graphic._url}});" class="dragdrop__item-image" draggable="false"></div>{{/if}} 
+          {{#if _graphic}}<div style="background-image: url({{_graphic._url}});" {{#if _graphic.alt}}aria-label="{{_graphic.alt}}"{{else}}aria-hidden="true"{{/if}} class="dragdrop__item-image" draggable="false"></div>{{/if}} 
         </div>
       {{!-- </div> --}}
       
@@ -72,10 +73,10 @@
   </div>
 
   <div class="dragdrop__buttons button" id="dragdrop__buttons">
-    <button class="dragdrop__btn btn js-dragdrop-check-click"  aria-label="{{{checkText}}}">
+    <button class="dragdrop__btn btn js-dragdrop-check-click" aria-label="{{{checkText}}}">
       <span>{{{checkText}}}</span>
     </button>
-    <button class="dragdrop__btn btn js-dragdrop-showfeedback-click is-hidden"  aria-label="{{{feedbackText}}}">
+    <button class="dragdrop__btn btn js-dragdrop-showfeedback-click is-hidden" aria-label="{{{feedbackText}}}">
       <span>{{{feedbackText}}}</span>
     </button>
   </div>
