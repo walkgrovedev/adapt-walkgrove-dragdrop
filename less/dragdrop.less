@@ -229,3 +229,23 @@
 
 
 }
+
+.dir-rtl {
+    .dragdrop__placeholder {
+
+        margin-left: auto!important;
+        margin-right: 1rem;
+
+        @media (max-width: @device-width-small) {
+            margin-right:0!important;
+        }
+
+        &:first-of-type {
+            margin-right:0!important;
+        }
+
+        &:last-of-type {
+            margin-left:1rem!important;
+        }
+    }
+}
