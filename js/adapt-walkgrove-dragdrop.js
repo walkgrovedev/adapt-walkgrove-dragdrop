@@ -21,6 +21,7 @@ define([
 
     preRender: function() {
       this._isSubmitted = false;
+      this._attemptsMade = 0;
       this.checkIfResetOnRevisit();
     },
 
@@ -267,7 +268,7 @@ define([
     },
 
     onOptionSelected: function(dropdown) {
-      if (this.model.get('_isInteractionComplete')) return;
+      //if (this.model.get('_isInteractionComplete')) return;
       var $container = dropdown.$el.parents('.matching__select-container');
       $container.removeClass('error');
       if (dropdown.isEmpty()) return;
