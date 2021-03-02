@@ -64,6 +64,8 @@ define([
 
       // If reset is enabled set defaults
       if (isResetOnRevisit) {
+        this._isSubmitted = false;
+        this._attemptsMade = 0;
         this.model.reset(isResetOnRevisit);
       }
     },
@@ -94,7 +96,9 @@ define([
 
       let correct = true;
 
-      this._attemptsMade++;
+      if(this._attemptsMade !== Number(this.model.get('_feedback')._attempts)) {
+        this._attemptsMade++;
+      }
 
       if (Adapt.device.screenSize !== 'large') {
         
