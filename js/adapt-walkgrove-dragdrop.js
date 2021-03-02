@@ -46,6 +46,14 @@ define([
       
       } 
 
+      //randomise drag items
+      var answers = $(".dragdrop__item");
+      for(var i = 0; i < answers.length; i++){
+          var target = Math.floor(Math.random() * answers.length -1) + 1;
+          var target2 = Math.floor(Math.random() * answers.length -1) +1;
+          answers.eq(target).before(answers.eq(target2));
+      }
+
 
       if (screen.width <= '1024') {
         $('.dragdrop__main').attr('style','display:none');
