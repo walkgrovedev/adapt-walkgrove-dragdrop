@@ -3,7 +3,7 @@
 
   <div class="dragdrop__main {{_position}}">
 
-    <div class="dragdrop__items">
+    <div class="dragdrop__items" id="dragdrop-items">
     {{#each _items}}
       {{!-- <div id="dragdrop__item-container"  > --}}
         <div id="drag-item-{{@index}}" 
@@ -72,9 +72,12 @@
 
   </div>
 
-  <div class="dragdrop__buttons button" id="dragdrop__buttons">
-    <button class="dragdrop__btn btn js-dragdrop-check-click" aria-label="{{{checkText}}}">
+  <div class="dragdrop__buttons button is-visible" id="dragdrop__buttons">
+    <button class="dragdrop__btn btn js-dragdrop-check-click is-hidden" aria-label="{{{checkText}}}">
       <span>{{{checkText}}}</span>
+    </button>
+    <button class="dragdrop__btn btn js-dragdrop-reset-click" aria-label="{{{resetText}}}">
+      <span>{{{resetText}}}</span>
     </button>
     <button class="dragdrop__btn btn js-dragdrop-showfeedback-click is-hidden" aria-label="{{{feedbackText}}}">
       <span>{{{feedbackText}}}</span>

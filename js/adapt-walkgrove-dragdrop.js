@@ -12,7 +12,8 @@ define([
       'drop .js-drag-target': 'drop',
       'dragover .js-drag-target': 'allowDrop',
       'click .js-dragdrop-check-click': 'onCheckClicked',
-      'click .js-dragdrop-showfeedback-click': 'onCheckClicked'
+      'click .js-dragdrop-showfeedback-click': 'onCheckClicked',
+      'click .js-dragdrop-reset-click': 'onResetClicked'
     },
 
     _draggable: null,
@@ -46,15 +47,13 @@ define([
         $('.dragdrop__item').attr('style','max-width:'  + 95/this.model.get('_items').length + '%');
       
       } 
-
-      //randomise drag items
-      var answers = $(".dragdrop__item");
-      for(var i = 0; i < answers.length; i++){
-          var target = Math.floor(Math.random() * answers.length -1) + 1;
-          var target2 = Math.floor(Math.random() * answers.length -1) +1;
-          answers.eq(target).before(answers.eq(target2));
-      }
-
+//randomise drag items
+var answers = $(".dragdrop__item");
+for(var i = 0; i < answers.length; i++){
+    var target = Math.floor(Math.random() * answers.length -1) + 1;
+    var target2 = Math.floor(Math.random() * answers.length -1) +1;
+    answers.eq(target).before(answers.eq(target2));
+}
 
       if (screen.width <= '1024') {
         $('.dragdrop__main').attr('style','display:none');
@@ -74,8 +73,8 @@ define([
       // If reset is enabled set defaults
       if (isResetOnRevisit) {
         this._isSubmitted = false;
-        this._attemptsMade = 0;
-        this.model.reset(isResetOnRevisit);
+      this._attemptsMade = 0;
+      this.model.reset(isResetOnRevisit);
       }
     },
 
@@ -101,13 +100,34 @@ define([
       }
     },
 
+    onResetClicked: function() {
+
+      this.model.get('_items').forEach(function(item, index) {
+        const draggable = document.getElementById('drag-item-' + index);
+        // reset the placeholder the draggable is joined to ...
+        draggable.setAttribute('data-placeholder', null);
+        // reset to parent
+        const container = document.getElementById('dragdrop-items');
+        container.appendChild(draggable); 
+      });
+
+      //reset size
+      if(this.model.get('_position') === "column") {
+        this.$('.js-drag-item').attr('style','max-width:'  + 95/this.model.get('_items').length + '%');
+      } 
+      this.$('.js-drag-item').removeClass('is-dropped');
+
+      this.$('.js-dragdrop-check-click').addClass('is-hidden');
+
+    },
+
     onCheckClicked: function() {
 
       let correct = true;
 
-      if(this._attemptsMade !== Number(this.model.get('_feedback')._attempts)) {
-        this._attemptsMade++;
-      }
+     if(this._attemptsMade !== Number(this.model.get('_feedback')._attempts)) {
+       this._attemptsMade++;
+     }
 
       if (Adapt.device.screenSize !== 'large') {
         
@@ -122,7 +142,6 @@ define([
           
           const answer = "";
           this.$('.matching__select').each(function(i, el) {
-            console.log(i);
             if(i === index) {
               answer = $(el).find('.js-dropdown-inner').html();
             }
@@ -139,7 +158,6 @@ define([
               }
             }
           });
-
         });
 
         if(this._attemptsMade === Number(this.model.get('_feedback')._attempts) || correct === true) {
@@ -189,6 +207,7 @@ define([
         if(correct) {
           this.setupCorrectFeedback();
         } else {
+         // console.log(this._attemptsMade, Number(this.model.get('_feedback')._attempts));
           if(this._attemptsMade === Number(this.model.get('_feedback')._attempts)) {
             this.setupIncorrectFinalFeedback();
           }else {
@@ -197,11 +216,14 @@ define([
         }
         if(this._attemptsMade === Number(this.model.get('_feedback')._attempts) || correct) {
           this.$('.js-dragdrop-showfeedback-click').addClass('is-visible');
+          this.$('.js-dragdrop-reset-click').addClass('is-hidden');
+          this.$('.js-dragdrop-check-click').addClass('is-hidden');
           this._isSubmitted = true;
         }
       }
 
       if(this._attemptsMade === Number(this.model.get('_feedback')._attempts) || correct) {
+        this.$('.js-dragdrop-reset-click').addClass('is-hidden');
         this.$('.js-dragdrop-check-click').addClass('is-selected');
         this.setCompletionStatus();
       }
@@ -220,7 +242,7 @@ define([
         complete = true;
       }
       if(complete) {
-        this.$('.dragdrop__buttons').addClass('is-visible');
+        this.$('.js-dragdrop-check-click').removeClass('is-hidden');
       }
     },
 
@@ -268,7 +290,8 @@ define([
     },
 
     onOptionSelected: function(dropdown) {
-      //if (this.model.get('_isInteractionComplete')) return;
+
+      if (this._isSubmitted === true) return;
       var $container = dropdown.$el.parents('.matching__select-container');
       $container.removeClass('error');
       if (dropdown.isEmpty()) return;
