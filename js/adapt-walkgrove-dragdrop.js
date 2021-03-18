@@ -47,13 +47,7 @@ define([
         $('.dragdrop__item').attr('style','max-width:'  + 95/this.model.get('_items').length + '%');
       
       } 
-//randomise drag items
-var answers = $(".dragdrop__item");
-for(var i = 0; i < answers.length; i++){
-    var target = Math.floor(Math.random() * answers.length -1) + 1;
-    var target2 = Math.floor(Math.random() * answers.length -1) +1;
-    answers.eq(target).before(answers.eq(target2));
-}
+
 
       if (screen.width <= '1024') {
         $('.dragdrop__main').attr('style','display:none');
@@ -62,6 +56,8 @@ for(var i = 0; i < answers.length; i++){
         $('.dragdrop__body-inner').html(this.model.get('mobileText'));
         $('.dragdrop__instruction-inner').html(this.model.get('mobileInstructions'));
         this.setUpDropdowns();
+
+        this.$('.js-dragdrop-reset-click').addClass('is-hidden');
 
       }
 
@@ -129,7 +125,7 @@ for(var i = 0; i < answers.length; i++){
        this._attemptsMade++;
      }
 
-      if (Adapt.device.screenSize !== 'large') {
+     if (screen.width <= '1024') {
         
         this.model.get('_items').forEach(function(item, index) {
 
@@ -140,24 +136,18 @@ for(var i = 0; i < answers.length; i++){
             }
           });
           
-          const answer = "";
-          this.$('.matching__select').each(function(i, el) {
+          let answer = "";
+          this.$('.matching__select-container').each(function(i, el) {
             if(i === index) {
               answer = $(el).find('.js-dropdown-inner').html();
             }
             
           });
 
-          this.$('.matching__select').each(function(i, el) {
-            if(i === index) {
-              if(answer != correctAnswer) {
-                correct = false;
-                $(el).find('.matching__select-incorrect-icon').show();
-              } else {
-                $(el).find('.matching__select-correct-icon').show();
-              }
-            }
-          });
+          if(answer !== correctAnswer) {
+            correct = false;
+          }
+
         });
 
         if(this._attemptsMade === Number(this.model.get('_feedback')._attempts) || correct === true) {
@@ -303,7 +293,7 @@ for(var i = 0; i < answers.length; i++){
         complete = true;
       }
       if(complete) {
-        this.$('.dragdrop__buttons').addClass('is-visible');
+        this.$('.js-dragdrop-check-click').removeClass('is-hidden');
 
         const divName = "#dragdrop__buttons";
         const element = document.querySelector(divName);
