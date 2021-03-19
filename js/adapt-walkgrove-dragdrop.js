@@ -59,6 +59,14 @@ define([
 
         this.$('.js-dragdrop-reset-click').addClass('is-hidden');
 
+      } else {
+        //randomise drag items
+        var answers = $(".dragdrop__item");
+        for(var i = 0; i < answers.length; i++){
+            var target = Math.floor(Math.random() * answers.length -1) + 1;
+            var target2 = Math.floor(Math.random() * answers.length -1) +1;
+            answers.eq(target).before(answers.eq(target2));
+        }
       }
 
     },
