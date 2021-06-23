@@ -32,7 +32,9 @@ define([
 
       if(this.model.get('_placeholder_position') === "row") {
         
-        $('.dragdrop__placeholder').width("" + 90/this.model.get('_items').length + "%");
+        $('.dragdrop__placeholder').width("" + 95/this.model.get('_placeholders').length + "%");
+        $('.dragdrop__placeholder').attr('style','max-width:'  + 95/this.model.get('_placeholders').length + '%'); 
+        $('.dragdrop__placeholder').attr('style','width:'  + 95/this.model.get('_placeholders').length + '%');
         const itemDimensions = this.model.get('_itemDimensions');
         const stacked = this.model.get('_items').length/this.model.get('_placeholders').length;
         let heightVar = itemDimensions._height;
@@ -45,7 +47,7 @@ define([
       if(this.model.get('_position') === "column") {
         
         $('.dragdrop__item').attr('style','max-width:'  + 95/this.model.get('_items').length + '%');
-      
+        $('.dragdrop__item').attr('style','width:'  + 95/this.model.get('_items').length + '%');
       } 
 
 
@@ -58,7 +60,6 @@ define([
         this.setUpDropdowns();
 
         this.$('.js-dragdrop-reset-click').addClass('is-hidden');
-
       } else {
         //randomise drag items
         var answers = $(".dragdrop__item");
@@ -117,7 +118,8 @@ define([
 
       //reset size
       if(this.model.get('_position') === "column") {
-        this.$('.js-drag-item').attr('style','max-width:'  + 95/this.model.get('_items').length + '%');
+        $('.dragdrop__item').attr('style','max-width:'  + 95/this.model.get('_items').length + '%');
+        $('.dragdrop__item').attr('style','width:'  + 95/this.model.get('_items').length + '%');
       } 
       this.$('.js-drag-item').removeClass('is-dropped');
 
@@ -152,6 +154,7 @@ define([
             
           });
 
+          //console.log(answer, correctAnswer);
           if(answer !== correctAnswer) {
             correct = false;
           }
@@ -193,21 +196,51 @@ define([
         }, 100);
         if(correct) {
           this.$('.dragdrop__feedback-correct').addClass('show-feedback');
+
+          //audio?
+          if (Adapt.config.get('_sound')._isActive === true) {
+            if ( this.model.get('_feedback')._audio) {
+              Adapt.trigger('audio:partial', {src: this.model.get('_feedback')._audio._src});
+            }
+          }
+
         } else {
           if(this._attemptsMade === Number(this.model.get('_feedback')._attempts)) {
             this.$('.dragdrop__feedback-incorrect').addClass('show-feedback');
           } else {
             this.$('.dragdrop__feedback-incorrect_final').addClass('show-feedback');
+
+            //audio?
+            if (Adapt.config.get('_sound')._isActive === true) {
+              if ( this.model.get('_feedback')._audio_incorrect) {
+                Adapt.trigger('audio:partial', {src: this.model.get('_feedback')._audio_incorrect._src});
+              }
+            }
           }
         }
       } else {
         //NOTIFY POPUP FEEDBACK
         if(correct) {
           this.setupCorrectFeedback();
+          
+            //audio?
+            if (Adapt.config.get('_sound')._isActive === true) {
+              if ( this.model.get('_feedback')._audio) {
+                Adapt.trigger('audio:partial', {src: this.model.get('_feedback')._audio._src});
+              }
+            }
         } else {
          // console.log(this._attemptsMade, Number(this.model.get('_feedback')._attempts));
           if(this._attemptsMade === Number(this.model.get('_feedback')._attempts)) {
             this.setupIncorrectFinalFeedback();
+
+            
+            //audio?
+            if (Adapt.config.get('_sound')._isActive === true) {
+              if ( this.model.get('_feedback')._audio_incorrect) {
+                Adapt.trigger('audio:partial', {src: this.model.get('_feedback')._audio_incorrect._src});
+              }
+            }
           }else {
             this.setupIncorrectFeedback();
           }
