@@ -1,99 +1,103 @@
 <div class="component__inner dragdrop__inner">
   {{> component this}} 
 
-  <div class="dragdrop__main {{_position}}">
+  <div class="component__main dragdrop__main {{_position}}">
 
-    <div class="dragdrop__items" id="dragdrop-items">
-    {{#each _items}}
-      {{!-- <div id="dragdrop__item-container"  > --}}
-        <div id="drag-item-{{@index}}" 
-          class="dragdrop__item js-drag-item {{_classes}}" 
-          data-draggable="{{_placeholder}}"
-          draggable="true"
-          {{#if text}}aria-label="{{text}}"{{/if}}>
-          {{#if text}}
-            <div class="dragdrop__item-title">{{{text}}}</div>
+    {{!-- {{#if _background}}<img class="dragdrop__widget-background" src="{{_background}}" aria-hidden="true" alt="" />{{/if}} --}}
+
+    {{!-- <div class="dragdrop__widget"> --}}
+
+      <div class="dragdrop__items" id="dragdrop-items">
+      {{#each _items}}
+        {{!-- <div id="dragdrop__item-container"  > --}}
+          <div id="drag-item-{{../_id}}-{{@index}}" 
+            class="dragdrop__item js-drag-item {{_classes}}" 
+            data-draggable="{{_placeholder}}"
+            draggable="true"
+            {{#if text}}aria-label="{{text}}"{{/if}}>
+            {{#if text}}
+              <div class="dragdrop__item-title">{{{text}}}</div>
+            {{/if}} 
+            {{#if _graphic}}<div style="background-image: url({{_graphic._url}});" {{#if _graphic.alt}}aria-label="{{_graphic.alt}}"{{else}}aria-hidden="true" alt=""{{/if}} class="dragdrop__item-image" draggable="false"></div>{{/if}} 
+          </div>
+        {{!-- </div> --}}
+        
+      {{/each}}
+      </div> 
+
+      <div class="dragdrop__placeholders {{_placeholder_position}}">
+      {{#each _placeholders}}
+        <div class="dragdrop__placeholder {{_classes}}">
+          {{#if title}}
+            <div class="dragdrop__placeholder-title">{{title}}</div>
           {{/if}} 
-          {{#if _graphic}}<div style="background-image: url({{_graphic._url}});" {{#if _graphic.alt}}aria-label="{{_graphic.alt}}"{{else}}aria-hidden="true" alt=""{{/if}} class="dragdrop__item-image" draggable="false"></div>{{/if}} 
+          <div id="dragdrop__placeholder-{{../_id}}-{{@index}}" 
+                data-placeholder="{{@index}}"
+                class="dragdrop__placeholder-items js-drag-target" 
+                style="min-height: {{../_itemDimensions._height}}"
+                ></div>
         </div>
-      {{!-- </div> --}}
-      
-    {{/each}}
-    </div> 
-
-    <div class="dragdrop__placeholders {{_placeholder_position}}">
-    {{#each _placeholders}}
-      <div class="dragdrop__placeholder {{_classes}}">
-        {{#if title}}
-          <div class="dragdrop__placeholder-title">{{title}}</div>
-        {{/if}} 
-        <div id="dragdrop__placeholder-{{@index}}" 
-              data-placeholder="{{@index}}"
-              class="dragdrop__placeholder-items js-drag-target" 
-              style="min-height: {{../_itemDimensions._height}}"
-              ></div>
-      </div>
-    {{/each}}
-    </div> 
-
-  </div>
-
-  <div class="dragdrop__main-mobile">
-    
-    
-    {{#each _items}}
-    <div class="matching__item item item-{{@index}}{{#unless ../_isEnabled}}{{#if ../_canShowMarking}}{{#if _isCorrect}} is-correct{{else}} is-incorrect{{/if}}{{/if}}{{/unless}}">
-
-      {{#if text}}
-      <div class="matching__item-title">
-        <div class="matching__item-title_inner">
-          {{{text}}}
-        </div>
-      </div>
-      {{/if}}
-
-      <div class="matching__select-container">
-
-        {{> dropdown this placeholder=../placeholder _id=../_id _dropdownIndex=@index}}
-
-         <div class="matching__select-state">
-          <div class="matching__select-icon matching__select-correct-icon">
-            <div class="icon"></div>
-          </div>
-          <div class="matching__select-icon matching__select-incorrect-icon">
-            <div class="icon"></div>
-          </div>
-        </div>
-
-      </div>
+      {{/each}}
+      </div> 
 
     </div>
-    {{/each}}
 
-  </div>
+    <div class="dragdrop__main-mobile">
+      
+      
+      {{#each _items}}
+      <div class="matching__item item item-{{@index}}{{#unless ../_isEnabled}}{{#if ../_canShowMarking}}{{#if _isCorrect}} is-correct{{else}} is-incorrect{{/if}}{{/if}}{{/unless}}">
 
-  <div class="dragdrop__buttons button is-visible" id="dragdrop__buttons">
-    <button class="dragdrop__btn btn js-dragdrop-check-click is-hidden" aria-label="{{{checkText}}}">
-      <span>{{{checkText}}}</span>
-    </button>
-    <button class="dragdrop__btn btn js-dragdrop-reset-click" aria-label="{{{resetText}}}">
-      <span>{{{resetText}}}</span>
-    </button>
-    <button class="dragdrop__btn btn js-dragdrop-showfeedback-click is-hidden" aria-label="{{{feedbackText}}}">
-      <span>{{{feedbackText}}}</span>
-    </button>
-  </div>
+        {{#if text}}
+        <div class="matching__item-title">
+          <div class="matching__item-title_inner">
+            {{{text}}}
+          </div>
+        </div>
+        {{/if}}
 
-  <div id="dragdrop__feedback" class="dragdrop__feedback">
-    {{#if _feedback.title}}
-      <h2 class="dragdrop__feedback-title">{{_feedback.title}}</h2>
-    {{/if}} 
-    <div class="dragdrop__feedback-correct feedback" >{{{_feedback.correct}}}</div>
-    <div class="dragdrop__feedback-incorrect feedback" >{{{_feedback.incorrect}}}</div>
-    <div class="dragdrop__feedback-incorrect_final feedback" >{{{_feedback.incorrect_final}}}</div>
-  </div>
+        <div class="matching__select-container">
 
+          {{> dropdown this placeholder=../placeholder _id=../_id _dropdownIndex=@index}}
 
+          <div class="matching__select-state">
+            <div class="matching__select-icon matching__select-correct-icon">
+              <div class="icon"></div>
+            </div>
+            <div class="matching__select-icon matching__select-incorrect-icon">
+              <div class="icon"></div>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+      {{/each}}
+
+    </div>
+
+    <div class="dragdrop__buttons button is-visible" id="dragdrop__buttons">
+      <button class="dragdrop__btn btn js-dragdrop-check-click is-hidden" aria-label="{{{checkText}}}">
+        <span>{{{checkText}}}</span>
+      </button>
+      <button class="dragdrop__btn btn js-dragdrop-reset-click" aria-label="{{{resetText}}}">
+        <span>{{{resetText}}}</span>
+      </button>
+      <button class="dragdrop__btn btn js-dragdrop-showfeedback-click is-hidden" aria-label="{{{feedbackText}}}">
+        <span>{{{feedbackText}}}</span>
+      </button>
+    </div>
+
+    <div id="dragdrop__feedback" class="dragdrop__feedback">
+      {{#if _feedback.title}}
+        <h2 class="dragdrop__feedback-title">{{_feedback.title}}</h2>
+      {{/if}} 
+      <div class="dragdrop__feedback-correct feedback" >{{{_feedback.correct}}}</div>
+      <div class="dragdrop__feedback-incorrect feedback" >{{{_feedback.incorrect}}}</div>
+      <div class="dragdrop__feedback-incorrect_final feedback" >{{{_feedback.incorrect_final}}}</div>
+    </div>
+
+  {{!-- </div> --}}
   
 
 </div>

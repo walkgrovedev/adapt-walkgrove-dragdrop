@@ -32,37 +32,37 @@ define([
 
       if(this.model.get('_placeholder_position') === "row") {
         
-        $('.dragdrop__placeholder').width("" + 95/this.model.get('_placeholders').length + "%");
-        $('.dragdrop__placeholder').attr('style','max-width:'  + 95/this.model.get('_placeholders').length + '%'); 
-        $('.dragdrop__placeholder').attr('style','width:'  + 95/this.model.get('_placeholders').length + '%');
+        this.$('.dragdrop__placeholder').width("" + 95/this.model.get('_placeholders').length + "%");
+        this.$('.dragdrop__placeholder').attr('style','max-width:'  + 95/this.model.get('_placeholders').length + '%'); 
+        this.$('.dragdrop__placeholder').attr('style','width:'  + 95/this.model.get('_placeholders').length + '%');
         const itemDimensions = this.model.get('_itemDimensions');
         const stacked = this.model.get('_items').length/this.model.get('_placeholders').length;
         let heightVar = itemDimensions._height;
         heightVar = Number(heightVar.replace('px',''));
         // console.log(stacked, heightVar);
-        $('.dragdrop__placeholder-items').attr('style','min-height:'  + ( stacked * heightVar) + 'px');// .height("" +  stacked * heightVar + "");
+        this.$('.dragdrop__placeholder-items').attr('style','min-height:'  + ( stacked * heightVar) + 'px');// .height("" +  stacked * heightVar + "");
       
       } 
 
       if(this.model.get('_position') === "column") {
         
-        $('.dragdrop__item').attr('style','max-width:'  + 95/this.model.get('_items').length + '%');
-        $('.dragdrop__item').attr('style','width:'  + 95/this.model.get('_items').length + '%');
+        this.$('.dragdrop__item').attr('style','max-width:'  + 95/this.model.get('_items').length + '%');
+        this.$('.dragdrop__item').attr('style','width:'  + 95/this.model.get('_items').length + '%');
       } 
 
 
       if (screen.width <= '1024') {
-        $('.dragdrop__main').attr('style','display:none');
-        $('.dragdrop__main-mobile').attr('style','display:block');
+        this.$('.dragdrop__main').attr('style','display:none');
+        this.$('.dragdrop__main-mobile').attr('style','display:block');
 
-        $('.dragdrop__body-inner').html(this.model.get('mobileText'));
-        $('.dragdrop__instruction-inner').html(this.model.get('mobileInstructions'));
+        this.$('.dragdrop__body-inner').html(this.model.get('mobileText'));
+        this.$('.dragdrop__instruction-inner').html(this.model.get('mobileInstructions'));
         this.setUpDropdowns();
 
         this.$('.js-dragdrop-reset-click').addClass('is-hidden');
       } else {
         //randomise drag items
-        var answers = $(".dragdrop__item");
+        var answers = this.$(".dragdrop__item");
         for(var i = 0; i < answers.length; i++){
             var target = Math.floor(Math.random() * answers.length -1) + 1;
             var target2 = Math.floor(Math.random() * answers.length -1) +1;
@@ -78,8 +78,14 @@ define([
       // If reset is enabled set defaults
       if (isResetOnRevisit) {
         this._isSubmitted = false;
-      this._attemptsMade = 0;
-      this.model.reset(isResetOnRevisit);
+        this._attemptsMade = 0;
+        this.model.reset(isResetOnRevisit);
+
+        this.model.set({
+          _isEnabled: true,
+          _isComplete: false,
+          _isInteractionComplete: false
+        });
       }
     },
 
@@ -95,7 +101,7 @@ define([
       ev.preventDefault();
       if (ev.target.classList.contains('js-drag-target') && !this._isSubmitted) {
         const draggable = document.getElementById(this._draggable);
-        $(draggable).attr('style','max-width:100%');
+        this.$(draggable).attr('style','max-width:100%');
         ev.target.appendChild(draggable);
         this.setItemVisited(draggable);
 
@@ -118,8 +124,8 @@ define([
 
       //reset size
       if(this.model.get('_position') === "column") {
-        $('.dragdrop__item').attr('style','max-width:'  + 95/this.model.get('_items').length + '%');
-        $('.dragdrop__item').attr('style','width:'  + 95/this.model.get('_items').length + '%');
+        this.$('.dragdrop__item').attr('style','max-width:'  + 95/this.model.get('_items').length + '%');
+        this.$('.dragdrop__item').attr('style','width:'  + 95/this.model.get('_items').length + '%');
       } 
       this.$('.js-drag-item').removeClass('is-dropped');
 
@@ -167,9 +173,10 @@ define([
 
       } else {
 
-        this.model.get('_items').forEach(function(item, index) {
+        this.model.get('_items').forEach((item, index) => {
           // console.log('drag-item-' + index);
-          const draggable = document.getElementById('drag-item-' + index);
+          const thisID = this.model.get('_id');
+          const draggable = document.getElementById('drag-item-' + thisID + '-' + index);
           // console.log(draggable);
           let draggable_place = draggable.getAttribute('data-draggable');
           let draggable_placeholder = draggable.getAttribute('data-placeholder');
@@ -184,79 +191,97 @@ define([
 
       const feedbackInline = this.model.get('_feedbackInline');
 
+      if(!this.model.get('_assessment')){
+        if(feedbackInline) {
+          // INLINE FEEDBACK
+          this.$('.dragdrop__feedback').addClass('is-visible');
+          const divName = "#dragdrop__feedback";
+          const element = document.querySelector(divName);
+          // scroll to element
+          setTimeout(function(){
+            element.scrollIntoView(false);
+          }, 100);
+          if(correct) {
+            this.$('.dragdrop__feedback-correct').addClass('show-feedback');
 
-      if(feedbackInline) {
-        // INLINE FEEDBACK
-        this.$('.dragdrop__feedback').addClass('is-visible');
-        const divName = "#dragdrop__feedback";
-        const element = document.querySelector(divName);
-        // scroll to element
-        setTimeout(function(){
-          element.scrollIntoView(false);
-        }, 100);
-        if(correct) {
-          this.$('.dragdrop__feedback-correct').addClass('show-feedback');
-
-          //audio?
-          if (Adapt.config.get('_sound')._isActive === true) {
-            if ( this.model.get('_feedback')._audio) {
-              Adapt.trigger('audio:partial', {src: this.model.get('_feedback')._audio._src});
-            }
-          }
-
-        } else {
-          if(this._attemptsMade === Number(this.model.get('_feedback')._attempts)) {
-            this.$('.dragdrop__feedback-incorrect').addClass('show-feedback');
-          } else {
-            this.$('.dragdrop__feedback-incorrect_final').addClass('show-feedback');
-
-            //audio?
-            if (Adapt.config.get('_sound')._isActive === true) {
-              if ( this.model.get('_feedback')._audio_incorrect) {
-                Adapt.trigger('audio:partial', {src: this.model.get('_feedback')._audio_incorrect._src});
-              }
-            }
-          }
-        }
-      } else {
-        //NOTIFY POPUP FEEDBACK
-        if(correct) {
-          this.setupCorrectFeedback();
-          
             //audio?
             if (Adapt.config.get('_sound')._isActive === true) {
               if ( this.model.get('_feedback')._audio) {
                 Adapt.trigger('audio:partial', {src: this.model.get('_feedback')._audio._src});
               }
             }
-        } else {
-         // console.log(this._attemptsMade, Number(this.model.get('_feedback')._attempts));
-          if(this._attemptsMade === Number(this.model.get('_feedback')._attempts)) {
-            this.setupIncorrectFinalFeedback();
 
-            
-            //audio?
-            if (Adapt.config.get('_sound')._isActive === true) {
-              if ( this.model.get('_feedback')._audio_incorrect) {
-                Adapt.trigger('audio:partial', {src: this.model.get('_feedback')._audio_incorrect._src});
+          } else {
+            if(this._attemptsMade === Number(this.model.get('_feedback')._attempts)) {
+              this.$('.dragdrop__feedback-incorrect').addClass('show-feedback');
+            } else {
+              this.$('.dragdrop__feedback-incorrect_final').addClass('show-feedback');
+
+              //audio?
+              if (Adapt.config.get('_sound')._isActive === true) {
+                if ( this.model.get('_feedback')._audio_incorrect) {
+                  Adapt.trigger('audio:partial', {src: this.model.get('_feedback')._audio_incorrect._src});
+                }
               }
             }
-          }else {
-            this.setupIncorrectFeedback();
+          }
+        } else {
+          //NOTIFY POPUP FEEDBACK
+          if(correct) {
+            this.setupCorrectFeedback();
+            
+              //audio?
+              if (Adapt.config.get('_sound')._isActive === true) {
+                if ( this.model.get('_feedback')._audio) {
+                  Adapt.trigger('audio:partial', {src: this.model.get('_feedback')._audio._src});
+                }
+              }
+          } else {
+          // console.log(this._attemptsMade, Number(this.model.get('_feedback')._attempts));
+            if(this._attemptsMade === Number(this.model.get('_feedback')._attempts)) {
+              this.setupIncorrectFinalFeedback();
+
+              
+              //audio?
+              if (Adapt.config.get('_sound')._isActive === true) {
+                if ( this.model.get('_feedback')._audio_incorrect) {
+                  Adapt.trigger('audio:partial', {src: this.model.get('_feedback')._audio_incorrect._src});
+                }
+              }
+            }else {
+              this.setupIncorrectFeedback();
+            }
+          }
+          if(this._attemptsMade === Number(this.model.get('_feedback')._attempts) || correct) {
+            this.$('.js-dragdrop-showfeedback-click').addClass('is-visible');
+            this.$('.js-dragdrop-reset-click').addClass('is-hidden');
+            this.$('.js-dragdrop-check-click').addClass('is-hidden');
+            this._isSubmitted = true;
           }
         }
-        if(this._attemptsMade === Number(this.model.get('_feedback')._attempts) || correct) {
-          this.$('.js-dragdrop-showfeedback-click').addClass('is-visible');
-          this.$('.js-dragdrop-reset-click').addClass('is-hidden');
-          this.$('.js-dragdrop-check-click').addClass('is-hidden');
-          this._isSubmitted = true;
-        }
-      }
 
-      if(this._attemptsMade === Number(this.model.get('_feedback')._attempts) || correct) {
-        this.$('.js-dragdrop-reset-click').addClass('is-hidden');
-        this.$('.js-dragdrop-check-click').addClass('is-selected');
+        if(this._attemptsMade === Number(this.model.get('_feedback')._attempts) || correct) {
+          this.$('.js-dragdrop-reset-click').addClass('is-hidden');
+          this.$('.js-dragdrop-check-click').addClass('is-selected');
+          this.setCompletionStatus();
+        }
+
+      } else {
+
         this.setCompletionStatus();
+
+        const screenId = this.model.get('_id');
+
+        if(correct) {
+          Adapt.findById(screenId).set('_score', 1);
+          //console.log(Adapt.findById(screenId).get('_score'));
+        } else {
+          Adapt.findById(screenId).set('_score', 0);
+          //console.log(Adapt.findById(screenId).get('_score'));
+        }
+
+        this.$('.dragdrop__buttons').removeClass('is-visible');
+
       }
 
     
@@ -311,7 +336,7 @@ define([
       this.$('.matching__item').each(function(i, el) {
         var value = i;
         var dropdown = new DropDown({
-          el: this.$(el).find('.dropdown')[0],
+          el: $(el).find('.dropdown')[0],
           placeholder: this.model.get('placeholder'),
           value: value
         });
@@ -340,7 +365,7 @@ define([
         const element = document.querySelector(divName);
         // scroll to element
         setTimeout(function(){
-          element.scrollIntoView(false);
+          //element.scrollIntoView(false);
          }, 100);
       }
     },
