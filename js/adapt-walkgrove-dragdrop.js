@@ -113,12 +113,13 @@ define([
 
     onResetClicked: function() {
 
-      this.model.get('_items').forEach(function(item, index) {
-        const draggable = document.getElementById('drag-item-' + index);
+      this.model.get('_items').forEach((item, index) => {
+        const thisID = this.model.get('_id');
+        const draggable = document.getElementById('drag-item-' + thisID + '-' + index);
         // reset the placeholder the draggable is joined to ...
         draggable.setAttribute('data-placeholder', null);
         // reset to parent
-        const container = document.getElementById('dragdrop-items');
+        const container = document.getElementById('dragdrop-items-' + thisID + '');
         container.appendChild(draggable); 
       });
 
@@ -143,7 +144,7 @@ define([
 
      if (screen.width <= '1024') {
         
-        this.model.get('_items').forEach(function(item, index) {
+        this.model.get('_items').forEach((item, index) => {
 
           let correctAnswer = "";
           item._options.forEach(function(option, i) {
@@ -152,15 +153,16 @@ define([
             }
           });
           
+          const compID = this.model.get('_id');
           let answer = "";
           this.$('.matching__select-container').each(function(i, el) {
             if(i === index) {
-              answer = $(el).find('.js-dropdown-inner').html();
+              answer = $(el).find('.js-dropdown-inner-' + compID + '').html();
             }
             
           });
 
-          //console.log(answer, correctAnswer);
+          console.log(answer, correctAnswer);
           if(answer !== correctAnswer) {
             correct = false;
           }
